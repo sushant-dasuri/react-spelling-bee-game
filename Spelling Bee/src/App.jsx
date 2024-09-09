@@ -1,36 +1,66 @@
-import { useState, useEffect } from 'react';
-import { Header } from './components/Header.jsx';
-import { Honeycomb } from './components/Honeycomb.jsx';
-import './App.css';
+import { useState, useEffect } from "react";
+import { Header } from "./components/Header.jsx";
+import { Honeycomb } from "./components/Honeycomb.jsx";
+import {Guess} from './components/Guess.jsx';
+import "./App.css";
 
 function App() {
-    
-    const [data, setData] = useState();
-    useEffect(() => {
-        async function fetchData() {
-            const result = await fetch('/api/data.json', { headers: { "Content-Type": "application/json" } });
-            const json = await result.json();
-            setData(json.data.today);
-        }
-        fetchData();
-    }, []);
+  const [data, setData] = useState();
+  const [guess, setGuess] = useState("");
 
-    return (
+  const addLetter = (letter) => {
+    setGuess((g) => g + letter);
+  };
+
+  const removeLetter = () => {
+    setGuess(guess.slice(0, -1));
+  };
+
+  const checkGuess = () => {
+    if (data.answers && data.answers.includes(guess)) {
+      console.log("Good Job");
+    } else {
+      console.log("Not in the list");
+    }
+  };
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await fetch("/api/data.json", {
+        headers: { "Content-Type": "application/json" },
+      });
+      const json = await result.json();
+      setData(json.data.today);
+    }
+    fetchData();
+  }, []);
+
+  return (
+    <>
+      {data ? (
         <>
-            { data ? 
-                <>
-                    <Header date={data.displayDate} editor={data.editor} />
-                    <section className="container">
-                        <div className="inputs">
-                            <div className="center">
-                                <Honeycomb centerLetter={data.centerLetter} outerLetters={data.outerLetters} validLetters={data.validLetters}></Honeycomb>
-                            </div>
-                        </div>
-                    </section> 
-                </>          
-            : <p>...Loading</p> }
+          <Header date={data.displayDate} editor={data.editor} />
+          <section className="container">
+            <div className="inputs">
+              <div className="center">
+                <Guess guess={guess}></Guess>
+                <Honeycomb
+                  centerLetter={data.centerLetter}
+                  outerLetters={data.outerLetters}
+                  validLetters={data.validLetters}
+                  addLetter={addLetter}
+                  removeLetter={removeLetter}
+                  checkGuess={checkGuess}
+                ></Honeycomb>
+              </div>
+            </div>
+          </section>
         </>
-    );
+      ) : (
+        <p>...Loading</p>
+      )}
+    </>
+  );
 }
 
 export default App;
