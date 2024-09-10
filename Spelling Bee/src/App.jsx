@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import { Header } from "./components/Header.jsx";
 import { Honeycomb } from "./components/Honeycomb.jsx";
 import {Guess} from './components/Guess.jsx';
+import {CorrectGuesses} from './components/CorrectGuesses.jsx';
 import "./App.css";
 
 function App() {
   const [data, setData] = useState();
   const [guess, setGuess] = useState("");
+  const [correctGuesses, setCorrectGuesses] = useState([]);
 
   const addLetter = (letter) => {
     setGuess((g) => g + letter);
@@ -16,12 +18,24 @@ function App() {
     setGuess(guess.slice(0, -1));
   };
 
+  const addCorrectGuess = () => {
+    setCorrectGuesses([...correctGuesses, guess]);
+  }
+
   const checkGuess = () => {
-    if (data.answers && data.answers.includes(guess)) {
+    if(correctGuesses.includes(guess)) {
+        console.log("Already Found");
+    }
+    
+    else if (data.answers && data.answers.includes(guess)) {
+      addCorrectGuess(guess);
       console.log("Good Job");
-    } else {
+    } 
+    else {
       console.log("Not in the list");
     }
+
+    setGuess('');
   };
 
   useEffect(() => {
@@ -40,6 +54,7 @@ function App() {
       {data ? (
         <>
           <Header date={data.displayDate} editor={data.editor} />
+          <CorrectGuesses correctGuesses={correctGuesses}></CorrectGuesses>
           <section className="container">
             <div className="inputs">
               <div className="center">
