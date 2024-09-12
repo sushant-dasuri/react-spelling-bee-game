@@ -60,7 +60,7 @@ function App() {
           <section className="container">
             <div className="inputs">
               <div className="center">
-                <Guess guess={guess}></Guess>
+                <Guess guess={guess} centerLetter={data.centerLetter} outerLetters={data.outerLetters}></Guess>
                 <Honeycomb
                   centerLetter={data.centerLetter}
                   outerLetters={data.outerLetters}
