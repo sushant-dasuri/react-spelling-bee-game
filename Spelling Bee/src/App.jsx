@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "./components/Header.jsx";
+import { Score } from "./components/Score.jsx";
 import { Honeycomb } from "./components/Honeycomb.jsx";
 import {Guess} from './components/Guess.jsx';
 import {CorrectGuesses} from './components/CorrectGuesses.jsx';
@@ -54,6 +55,7 @@ function App() {
       {data ? (
         <>
           <Header date={data.displayDate} editor={data.editor} />
+          <Score correctGuesses={correctGuesses}></Score>
           <CorrectGuesses correctGuesses={correctGuesses}></CorrectGuesses>
           <section className="container">
             <div className="inputs">
